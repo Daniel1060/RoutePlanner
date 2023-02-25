@@ -8,16 +8,19 @@ namespace RoutePlanner
 {
     internal class Job
     {
-        private string clientName { get; set; }
-        private string clientID { get; set; }
-        private double routeLegDistance { get; set; }
-        private Port destination { get; set; }
+        public string clientName { get; set; }
+        public string jobID { get; set; }
+        public string clientID { get; set; }
+        public double routeLegDistance { get; set; }
+        public Port destination { get; set; }
 
-        public Job(string clientName, string clientID, double routeLegDistance, Port destination)
+        public Job(string clientName, string jobID, string clientID, Port destination)
         {
+
             this.clientName = clientName;
+            this.jobID = jobID;
             this.clientID = clientID;
-            this.routeLegDistance = routeLegDistance;
+            this.routeLegDistance = 0;
             this.destination = destination;
         }
     }

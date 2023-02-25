@@ -8,19 +8,19 @@ namespace RoutePlanner
 {
     internal class Ship
     {
-        private string shipName { get; set; }
-        private double hullWeight { get; set; }
-        private double routeLegDistance { get; set; }
-        private double cruiseSpeed { get; set; }
-        private List<Job> jobs { get; set; }
+        public string shipName { get; set; }
+        public double hullWeight { get; set; }
+        public double routeLegDistance { get; set; }
+        public double cruiseSpeed { get; set; }
+        public List<Job> jobs { get; set; }
 
-        public Ship(string shipName, double hullWeight, double routeLegDistance, double cruiseSpeed, List<Job> jobs)
+     
+        public Ship(string shipName, double hullWeight, double cruiseSpeed)
         {
             this.shipName = shipName;
             this.hullWeight = hullWeight;
-            this.routeLegDistance = routeLegDistance;
             this.cruiseSpeed = cruiseSpeed;
-            this.jobs = jobs;
+            this.routeLegDistance = 0;
         }
     }
 }
