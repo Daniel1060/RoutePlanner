@@ -157,10 +157,23 @@ namespace Route_Planner
         {
             foreach(Client client in clients)
             {
+                //MessageBox.Show($"Emission: {emission.ToString()}");
+                //MessageBox.Show($"Checking {client.clientID} == {clientID}");
                 if (client.clientID == clientID) { client.addEmissions(emission); break; }
 
             }
 
+        }
+
+        internal static double GetDistance(List<Port> optimal)
+        {
+            double distance = 0;
+            for(int i=0; i<optimal.Count-1; i++)
+            {
+                distance+=distanceBetweenPorts(optimal[i], optimal[i+1]);
+            }
+                //System.Windows.MessageBox.Show(distance.ToString());
+            return distance;
         }
     }
 }

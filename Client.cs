@@ -1,4 +1,6 @@
-﻿namespace Route_Planner
+﻿using System.Windows;
+
+namespace Route_Planner
 {
     internal class Client
     {
@@ -6,16 +8,17 @@
         public string clientID { get; set; }
         public double emissions { get; set; }
 
-        public Client(string clientName, string clientID, double emissions)
+        public Client(string clientName, string clientID)
         {
             this.clientName = clientName;
             this.clientID = clientID;
-            this.emissions = emissions;
+            this.emissions = 0;
         }
 
         public void addEmissions(double value)
         {
             emissions+= value;
+            //MessageBox.Show($"Added {emissions} to get {value}");
         }
     }
 }

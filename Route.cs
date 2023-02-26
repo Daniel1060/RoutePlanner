@@ -21,17 +21,20 @@ namespace Route_Planner
         private Ship ship;
         private List<Job> jobs;
         private List<Port> port;
-        private List<Port> optimal;
+        public List<Port> optimal { get; set; }
+        private List<Client> clients;
         private double distance;
         private double co2Content;
-        private double totalEmission;
+        public double totalEmission { get; set; }
+        
 
-        public Route(Ship ship, List<Job> jobs)
+        public Route(Ship ship, List<Job> jobs, List<Client>clients)
         {
             port = new();
             optimal = new();
             this.ship = ship;
             this.jobs = jobs;
+            this.clients = clients;
             co2Content= 3.11;
 
             foreach(Job job in jobs)
@@ -40,14 +43,18 @@ namespace Route_Planner
             }
             PossibleRoute routes = new(port);
             optimal = routes.output;
-            System.Windows.MessageBox.Show("");
-
+            CO2Emission();
+            clientEmissions();
+            
+            
+            /*
             foreach(Port stop in optimal)
             {
                 MessageBox.Show(stop.portID);
                 
 
             }
+            */
         }
 
         public void calculateRoute(Port location, List<Job> jobs)
@@ -61,7 +68,7 @@ namespace Route_Planner
                     tmp.Remove(job);
                     this.calculateRoute(job.destination, tmp);
                     i++;
-                    MessageBox.Show($"Iterating {i}");
+                    //MessageBox.Show($"Iterating {i}");
                 }
             }
         }
@@ -71,17 +78,32 @@ namespace Route_Planner
             calculateRoute(jobs[0].destination, jobs);
         }
 
-        internal double CO2Emission()
+        internal void CO2Emission()
 
         {
             // fuelconsumption kg
+            distance = Functions.GetDistance(optimal);
             double fuelComsumption = distance / ship.nmpg;
             fuelComsumption *= 0.95; //density
 
-            return fuelComsumption * co2Content; // returns amount of CO2 in kg
+
+            totalEmission= fuelComsumption * co2Content; // returns amount of CO2 in kg
+        }
+
+        internal void clientEmissions()
+        {
+            for(int i=0; i<optimal.Count-1; i++) 
+            {
+                
+
+                double fuelConsumption = Functions.distanceBetweenPorts(optimal[i], optimal[i + 1])/ ship.nmpg;
+
+
+                Functions.increaseClientEmission(jobs[i].clientID, fuelConsumption *= 0.95, clients);
 
 
 
+            }
         }
     }
 }

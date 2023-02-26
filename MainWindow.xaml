@@ -14,8 +14,9 @@
             <RowDefinition Height="1*"/>
             
         </Grid.RowDefinitions>
-        
+        <Image Height="1080" Width="1920" Source="/map.png"/>
         <Canvas x:Name="cnv_Draw" Grid.Column="0" Grid.Row="0" Grid.RowSpan="8" MouseLeftButtonDown="addPort"/>
+        
 
     </Grid>
 </Window>

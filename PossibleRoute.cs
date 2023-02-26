@@ -54,11 +54,11 @@ namespace RoutePlanner
                 Port destination = getNextPort();
                 move(destination);
                 output.Add(destination);
-                System.Windows.MessageBox.Show($"{destination.portID} added to output");
+                //System.Windows.MessageBox.Show($"{destination.portID} added to output");
                 if(unvistedLocations.Count == 0)
                 {
                     output.Add(orgin);
-                    System.Windows.MessageBox.Show($"{orgin.portID} added to output");
+                    //System.Windows.MessageBox.Show($"{orgin.portID} added to output");
                 }
 
             }
