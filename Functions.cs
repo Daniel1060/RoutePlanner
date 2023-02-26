@@ -152,5 +152,15 @@ namespace Route_Planner
             double distance = Math.Sqrt(Math.Pow(port2.xCoord - port1.xCoord, 2) + Math.Pow(port2.yCoord - port1.yCoord, 2)); 
             return distance;
         }
+
+        internal static void increaseClientEmission(string clientID, double emission, List<Client> clients)
+        {
+            foreach(Client client in clients)
+            {
+                if (client.clientID == clientID) { client.addEmissions(emission); break; }
+
+            }
+
+        }
     }
 }

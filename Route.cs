@@ -19,14 +19,17 @@ namespace Route_Planner
     internal class Route
     {
         private Ship ship;
-        private List<Job> jobs = new List<Job>();
-        private List<Port> port = new();
-        private List<Port> optimal = new();
+        private List<Job> jobs;
+        private List<Port> port;
+        private List<Port> optimal;
         private double distance;
         private double co2Content;
+        private double totalEmission;
 
         public Route(Ship ship, List<Job> jobs)
         {
+            port = new();
+            optimal = new();
             this.ship = ship;
             this.jobs = jobs;
             co2Content= 3.11;
@@ -35,12 +38,15 @@ namespace Route_Planner
             {
                 port.Add(new Port(job.destination.xCoord, job.destination.yCoord, job.destination.portID));
             }
-            PossibleRoute routes = new(port, port[0]);
-            optimal = routes.generateNewRoute();
+            PossibleRoute routes = new(port);
+            optimal = routes.output;
+            System.Windows.MessageBox.Show("");
 
             foreach(Port stop in optimal)
             {
                 MessageBox.Show(stop.portID);
+                
+
             }
         }
 
