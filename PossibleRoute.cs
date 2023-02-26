@@ -11,93 +11,72 @@ namespace RoutePlanner
         List<Port> locations;
         List<Port> vistedLocations;
         Port currentLocation;
-        List<List<Port>> currentRoutes;
-        List<Port> unvistedLocations;
-        List<Port> bestRoute;
 
-        public PossibleRoute(List<Port> locations, List<Port> vistedLocations, Port currentLocation)
+        List<Port> unvistedLocations; 
+        public PossibleRoute(List<Port> locations)
         {
+            vistedLocations = new();
             this.locations = locations;
-            this.vistedLocations = vistedLocations;
-            this.currentLocation = currentLocation;
-
-            vistedLocations.Add(this.currentLocation);
-            currentRoutes = new();
-            unvistedLocations.Clear();
-            bestRoute = new();
-        }
-
-        public PossibleRoute(List<Port> locations, Port currentLocation)
-        {
-            this.locations = locations;
-            this.vistedLocations = new();
-            this.currentLocation = currentLocation;
-
-            vistedLocations.Add(this.currentLocation);
-
-            currentRoutes = new();
-            unvistedLocations = new();
-            bestRoute = new();
-        }
-
-        public List<Port> generateNewRoute()
-        {
-            unvistedLocations.Clear();
+            List<Port> unvistedLocations = getUnvistedLocations();
+            move(locations[0]);
             
+            List<Port> route = getRoute();
+        }
+        public List<Port> getUnvistedLocations()
+        {
+            List<Port> unvisited = new();
             foreach (Port location in locations)
             {
+
                 bool visitCheck = false;
                 foreach (Port vistedLoction in vistedLocations)
                 {
-                    if(location == vistedLoction)
+                    if (location == vistedLoction)
                     {
-                        visitCheck = true;break;
+                        visitCheck = true; break;
                     }
                     if (!visitCheck)
                     {
-                        unvistedLocations.Add(location);
-                        //System.Windows.MessageBox.Show("Arrived at port!");
+                        unvisited.Add(location);
                     }
                 }
             }
-            if (unvistedLocations.Count > 0)
-            {
-                foreach (Port location in unvistedLocations)
-                {
-                    PossibleRoute nextRoute = new PossibleRoute(locations, vistedLocations, location);
-                    currentRoutes.Add(nextRoute.generateNewRoute());
-                    System.Windows.MessageBox.Show("CREATED NEW ROUTE");
-                }
-                double minDistance = Int32.MaxValue;
-                
-           
-                foreach (List<Port> route in currentRoutes)
-                {
-                    if (getTotalDistance(route) < minDistance)
-                    {
-                        minDistance = getTotalDistance(route);
-                   
-                        bestRoute = route;
-                    }
-                }
-            }else{
-                return vistedLocations;
-            }
-            return null;
+            return unvisited;
         }
-        public double getTotalDistance(List<Port> locations)
+        public Port getNextPort()
         {
-            Port prevPort = null;
-            double totalDistance = 0;
-            foreach (Port port in locations)
+            unvistedLocations = getUnvistedLocations();
+            double minDistance = Int64.MaxValue;
+            Port nextPort = null;
+            foreach (Port port in unvistedLocations)
             {
-                if (prevPort != null)
+                if (Functions.distanceBetweenPorts(port,currentLocation) < minDistance)
                 {
-                    totalDistance += Functions.distanceBetweenPorts(prevPort, port);
+                    nextPort = port;
+                    minDistance = Functions.distanceBetweenPorts(port,currentLocation);
                 }
-                prevPort = port;
             }
-            return totalDistance;
+            if(unvistedLocations.Count == 0)
+            {
+                return locations[0];
+            }
+            return nextPort;
+        }
+        public void move(Port destination)
+        {
+            vistedLocations.Add(destination);
+            currentLocation = destination;
+        }
+        public List<Port> getRoute()
+        {
+            List<Port> output = new();
+            for (int i = 0; i < locations.Count; i++)
+            {
+                Port destination = getNextPort();
+                move(destination);
+                output.Add(destination);
+            }
+            return output;
         }
     }
 }
