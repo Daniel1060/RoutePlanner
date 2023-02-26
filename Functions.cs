@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
-namespace RoutePlanner
+namespace Route_Planner
 {
     internal class Functions
     {
@@ -20,6 +22,7 @@ namespace RoutePlanner
                     if (input.ToUpper() == "N") { return false; }
                     else if (input.ToUpper() == "Y") { return true; }
                     System.Console.WriteLine("Not a promptalid Prompt");
+                    
                 }
             }
             return false;
@@ -79,6 +82,7 @@ namespace RoutePlanner
                 else
                 {
                     System.Console.WriteLine("This is not a decimal value");
+                        
                 }
 
 
@@ -113,13 +117,13 @@ namespace RoutePlanner
             int count = 1;
             foreach (Port port in portList)
             {
-                System.Console.WriteLine($"1: PortID- {port.portID}");
+                System.Console.WriteLine($"{count} PortID- {port.portID}");
+                count++;
             }
-            
-            
-                GetIntRange("Please select a port", 0, portList.Count);
-            return null;
-            
+                
+            return portList[GetIntRange("Please select a port", 0, portList.Count)];
+
+
         }
 
         private int GetIntRange(string prompt, int min, int max)
@@ -141,6 +145,12 @@ namespace RoutePlanner
                     System.Console.WriteLine("This is not a decimal value");
                 }
             }
+        }
+
+        internal static double distanceBetweenPorts(Port port1, Port port2)
+        {
+            double distance = Math.Sqrt(Math.Pow(port2.xCoord - port1.xCoord, 2) + Math.Pow(port2.yCoord - port1.yCoord, 2)); 
+            return distance;
         }
     }
 }

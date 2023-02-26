@@ -1,3 +1,4 @@
+﻿using RoutePlanner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,28 @@ namespace Route_Planner
     {
         private Ship ship;
         private List<Job> jobs = new List<Job>();
-        private List<Job> tempJob = new();
+        private List<Port> port = new();
+        private List<Port> optimal = new();
+        private double distance;
+        private double co2Content;
 
         public Route(Ship ship, List<Job> jobs)
         {
             this.ship = ship;
             this.jobs = jobs;
+            co2Content= 3.11;
+
+            foreach(Job job in jobs)
+            {
+                port.Add(new Port(job.destination.xCoord, job.destination.yCoord, job.destination.portID));
+            }
+            PossibleRoute routes = new(port, port[0]);
+            optimal = routes.generateNewRoute();
+
+            foreach(Port stop in optimal)
+            {
+                MessageBox.Show(stop.portID);
+            }
         }
 
         public void calculateRoute(Port location, List<Job> jobs)
@@ -46,6 +63,19 @@ namespace Route_Planner
         internal void calculateEfficientRoute()
         {
             calculateRoute(jobs[0].destination, jobs);
+        }
+
+        internal double CO2Emission()
+
+        {
+            // fuelconsumption kg
+            double fuelComsumption = distance / ship.nmpg;
+            fuelComsumption *= 0.95; //density
+
+            return fuelComsumption * co2Content; // returns amount of CO2 in kg
+
+
+
         }
     }
 }
