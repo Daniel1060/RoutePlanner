@@ -10,7 +10,10 @@ namespace RoutePlanner
     {
         List<Port> locations;
         List<Port> vistedLocations;
-        Port currentLocation; 
+        Port currentLocation;
+        List<List<Port>> currentRoutes;
+        List<Port> unvistedLocations;
+        List<Port> bestRoute;
 
         public PossibleRoute(List<Port> locations, List<Port> vistedLocations, Port currentLocation)
         {
@@ -19,6 +22,9 @@ namespace RoutePlanner
             this.currentLocation = currentLocation;
 
             vistedLocations.Add(this.currentLocation);
+            currentRoutes = new();
+            unvistedLocations.Clear();
+            bestRoute = new();
         }
 
         public PossibleRoute(List<Port> locations, Port currentLocation)
@@ -28,19 +34,29 @@ namespace RoutePlanner
             this.currentLocation = currentLocation;
 
             vistedLocations.Add(this.currentLocation);
+
+            currentRoutes = new();
+            unvistedLocations = new();
+            bestRoute = new();
         }
 
         public List<Port> generateNewRoute()
         {
-            List<List<Port>> currentRoutes = new();
-            List<Port> unvistedLocations = new();
+            unvistedLocations.Clear();
+            
             foreach (Port location in locations)
             {
+                bool visitCheck = false;
                 foreach (Port vistedLoction in vistedLocations)
                 {
-                    if (locations != vistedLocations)
+                    if(location == vistedLoction)
+                    {
+                        visitCheck = true;break;
+                    }
+                    if (!visitCheck)
                     {
                         unvistedLocations.Add(location);
+                        //System.Windows.MessageBox.Show("Arrived at port!");
                     }
                 }
             }
@@ -50,9 +66,10 @@ namespace RoutePlanner
                 {
                     PossibleRoute nextRoute = new PossibleRoute(locations, vistedLocations, location);
                     currentRoutes.Add(nextRoute.generateNewRoute());
+                    System.Windows.MessageBox.Show("CREATED NEW ROUTE");
                 }
                 double minDistance = Int32.MaxValue;
-                List<Port> bestRoute = null;
+                
            
                 foreach (List<Port> route in currentRoutes)
                 {
@@ -63,9 +80,7 @@ namespace RoutePlanner
                         bestRoute = route;
                     }
                 }
-            }
-            else
-            {
+            }else{
                 return vistedLocations;
             }
             return null;
